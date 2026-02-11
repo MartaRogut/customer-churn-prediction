@@ -1,59 +1,186 @@
-# Customer Churn Prediction
+# Customer Churn Prediction (Decision Tree + Random Forest)
 
-This project focuses on predicting customer churn using supervised machine learning models.
-The goal is to identify customers who are likely to stop using a service, which can help businesses take preventive actions.
+This project predicts customer churn (binary classification) using machine learning models:
+a Decision Tree (baseline + tuned with GridSearchCV) and a Random Forest.
+The workflow includes data loading, preprocessing (one-hot encoding), model training, evaluation, and saving outputs (plots + feature importances).
 
-## Problem Overview
-Customer churn is a key business problem, especially in subscription-based services.
-Using historical customer data, this project builds classification models to predict whether a customer will churn.
+## What the script does
+The main script:
+1. Draws a simplified decision tree diagram (illustration) and saves it to `outputs/figures/simple_tree.png`
+2. Loads training and testing datasets from Excel files (`training.xlsx`, `testing.xlsx`)
+3. Preprocesses data:
+   - drops `CustomerID`
+   - separates target label `Churn`
+   - one-hot encodes categorical features (`Gender`, `SubscriptionType`, `ContractLength`)
+   - encodes train+test together to keep consistent dummy columns
+4. Trains and evaluates:
+   - **Decision Tree baseline** (`max_depth=4`)
+   - **Decision Tree tuned** using **GridSearchCV** (scoring = F1, StratifiedKFold CV=3)
+   - **Random Forest baseline** (`n_estimators=100`, `max_depth=8`)
+5. Produces outputs:
+   - decision tree plots saved in `outputs/figures/`
+   - feature importances from Random Forest saved to `outputs/feature_importances.csv`
 
-## Dataset
-The dataset contains customer-level information used for training and testing the models.
-It includes features related to customer behavior and service usage.
+## Dataset & Features
+The data is read from Excel files and parsed into columns:
+
+**Target**
+- `Churn` (0/1) — label used for prediction
+
+**Dropped**
+- `CustomerID` — removed from features
+
+**Numeric features**
+- `Age`
+- `Tenure`
+- `UsageFrequency`
+- `SupportCalls`
+- `PaymentDelay`
+- `TotalSpend`
+- `LastInteraction`
+
+**Categorical features (one-hot encoded)**
+- `Gender`
+- `SubscriptionType`
+- `ContractLength`
 
 Files:
-- `training.xlsx` – training dataset
-- `testing.xlsx` – test dataset
+- `training.xlsx` — training data
+- `testing.xlsx` — test data
 
-## Models Used
-The following machine learning models were implemented and compared:
-- Decision Tree Classifier
-- Random Forest Classifier
+## Models
+### 1) Decision Tree (baseline)
+- `DecisionTreeClassifier(max_depth=4, random_state=42)`
 
-Hyperparameter tuning was performed using GridSearchCV with cross-validation.
+### 2) Decision Tree (tuned)
+GridSearchCV parameters:
+- `max_depth`: [3, 4, 5]
+- `min_samples_split`: [10, 20, 40]
+- `min_samples_leaf`: [10, 20, 30]
 
-## Evaluation Metrics
-Model performance was evaluated using:
+Cross-validation:
+- `StratifiedKFold(n_splits=3, shuffle=True, random_state=42)`
+Scoring:
+- `f1`
+
+### 3) Random Forest (baseline)
+- `RandomForestClassifier(n_estimators=100, max_depth=8, random_state=42)`
+
+## Evaluation
+For each model, the script prints:
 - Accuracy
 - Precision
 - Recall
 - F1-score
+- Classification report
 - Confusion matrix
 
-These metrics were chosen to better assess model performance on imbalanced data.
+## Outputs
+Generated files:
+- `outputs/figures/simple_tree.png` — simplified illustrative tree diagram
+- `outputs/figures/base_tree.png` — plotted baseline decision tree (max_depth=4)
+- `outputs/figures/best_tree.png` — plotted tuned decision tree (max_depth up to 5)
+- `outputs/feature_importances.csv` — Random Forest feature importances (sorted)
 
-## Technologies
-- Python
-- pandas
-- scikit-learn
-- matplotlib
+## How to run
+1. Put the files in the project folder:
+   - `customer-churn-prediction.py`
+   - `training.xlsx`
+   - `testing.xlsx`
 
-## Project Structure
-- `customer-churn-prediction.py` – main script containing data preprocessing, model training, and evaluation
-- `training.xlsx` – training data
-- `testing.xlsx` – testing data
+2. Install dependencies:
+```bash
+pip install pandas matplotlib scikit-learn openpyxl
+# Customer Churn Prediction (Decision Tree + Random Forest)
 
-## Results
-The Random Forest model achieved better overall performance compared to the Decision Tree,
-especially in terms of recall and F1-score, making it more suitable for churn prediction.
+This project predicts customer churn (binary classification) using machine learning models:
+a Decision Tree (baseline + tuned with GridSearchCV) and a Random Forest.
+The workflow includes data loading, preprocessing (one-hot encoding), model training, evaluation, and saving outputs (plots + feature importances).
 
-## Conclusion
-This project demonstrates an end-to-end machine learning workflow:
-from data preprocessing, through model training and tuning, to evaluation.
-It highlights the importance of choosing appropriate evaluation metrics for classification problems.
+## What the script does
+The main script:
+1. Draws a simplified decision tree diagram (illustration) and saves it to `outputs/figures/simple_tree.png`
+2. Loads training and testing datasets from Excel files (`training.xlsx`, `testing.xlsx`)
+3. Preprocesses data:
+   - drops `CustomerID`
+   - separates target label `Churn`
+   - one-hot encodes categorical features (`Gender`, `SubscriptionType`, `ContractLength`)
+   - encodes train+test together to keep consistent dummy columns
+4. Trains and evaluates:
+   - **Decision Tree baseline** (`max_depth=4`)
+   - **Decision Tree tuned** using **GridSearchCV** (scoring = F1, StratifiedKFold CV=3)
+   - **Random Forest baseline** (`n_estimators=100`, `max_depth=8`)
+5. Produces outputs:
+   - decision tree plots saved in `outputs/figures/`
+   - feature importances from Random Forest saved to `outputs/feature_importances.csv`
 
-## Future Improvements
-- Feature engineering and feature importance analysis
-- Handling class imbalance with resampling techniques
-- Adding model interpretability (e.g. SHAP values)
-- Converting the project to a Jupyter Notebook for better presentation
+## Dataset & Features
+The data is read from Excel files and parsed into columns:
+
+**Target**
+- `Churn` (0/1) — label used for prediction
+
+**Dropped**
+- `CustomerID` — removed from features
+
+**Numeric features**
+- `Age`
+- `Tenure`
+- `UsageFrequency`
+- `SupportCalls`
+- `PaymentDelay`
+- `TotalSpend`
+- `LastInteraction`
+
+**Categorical features (one-hot encoded)**
+- `Gender`
+- `SubscriptionType`
+- `ContractLength`
+
+Files:
+- `training.xlsx` — training data
+- `testing.xlsx` — test data
+
+## Models
+### 1) Decision Tree (baseline)
+- `DecisionTreeClassifier(max_depth=4, random_state=42)`
+
+### 2) Decision Tree (tuned)
+GridSearchCV parameters:
+- `max_depth`: [3, 4, 5]
+- `min_samples_split`: [10, 20, 40]
+- `min_samples_leaf`: [10, 20, 30]
+
+Cross-validation:
+- `StratifiedKFold(n_splits=3, shuffle=True, random_state=42)`
+Scoring:
+- `f1`
+
+### 3) Random Forest (baseline)
+- `RandomForestClassifier(n_estimators=100, max_depth=8, random_state=42)`
+
+## Evaluation
+For each model, the script prints:
+- Accuracy
+- Precision
+- Recall
+- F1-score
+- Classification report
+- Confusion matrix
+
+## Outputs
+Generated files:
+- `outputs/figures/simple_tree.png` — simplified illustrative tree diagram
+- `outputs/figures/base_tree.png` — plotted baseline decision tree (max_depth=4)
+- `outputs/figures/best_tree.png` — plotted tuned decision tree (max_depth up to 5)
+- `outputs/feature_importances.csv` — Random Forest feature importances (sorted)
+
+## How to run
+1. Put the files in the project folder:
+   - `customer-churn-prediction.py`
+   - `training.xlsx`
+   - `testing.xlsx`
+
+2. Install dependencies:
+```bash
+pip install pandas matplotlib scikit-learn openpyxl
