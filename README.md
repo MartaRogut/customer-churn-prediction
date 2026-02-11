@@ -1,8 +1,13 @@
-# Customer Churn Prediction (Decision Tree + Random Forest)
+End-to-end machine learning project that predicts customer churn
+and helps identify customers at risk of leaving a company.
 
-This project predicts customer churn (binary classification) using machine learning models:
-a Decision Tree (baseline + tuned with GridSearchCV) and a Random Forest.
-The workflow includes data loading, preprocessing (one-hot encoding), model training, evaluation, and saving outputs (plots + feature importances).
+Models used: Decision Tree (baseline + tuned) and Random Forest.
+
+## Why this project?
+Customer churn is a major business problem in subscription-based services.
+This project shows how machine learning can be used to identify at-risk customers
+and support retention strategies.
+
 
 ## What the script does
 The main script:
